@@ -76,6 +76,12 @@ typedef struct V4
     ttreal x, y, z, w;
 } V4;
 
+typedef struct Ray
+{
+    V3 origin;
+    V3 dir;
+} Ray;
+
 // quaternion for rotations
 typedef struct Quat
 {
@@ -310,6 +316,11 @@ static inline V3 v3_scale(V3 v, ttreal scale) {
     return make_v3(v.x * scale, v.y * scale, v.z * scale);
 }
 
+// just a division
+static inline V3 v3_inv_scale(V3 v, ttreal scale) {
+    return make_v3(v.x/scale, v.y/scale, v.z/scale);
+}
+
 static inline V3 v3_sub(V3 *restrict res, V3 lhs, V3 rhs)
 {
     res->x = lhs.x - rhs.x;
@@ -324,6 +335,14 @@ static inline void v3_normalize(V3 *v)
     v->x /= len;
     v->y /= len;
     v->z /= len;
+}
+
+static inline float v3_dot(V3 l, V3 r) {
+    return l.x*r.x + l.y*r.y + l.z*r.z;
+}
+
+static inline float v3_len(V3 v) {
+    return tt_sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
 }
 
 static inline bool v3_hasnan(V3 v)
@@ -676,4 +695,11 @@ static inline void quat_v3_mul_dir(V3 *restrict res, Quat q, V3 v)
     V4 rh;
     mat4_v4_mul(&rh, &mat, vh);
     res->x = rh.x; res->y = rh.y; res->z = rh.z;
+}
+
+static inline V3 ray_intersect_plane(Ray r, V4 p) {
+    V3 n = (V3){p.x, p.y, p.z};
+    ttreal t = -(v3_dot(r.origin, n) + p.w) / v3_dot(r.dir,n);
+    V3 ret = (V3) {t*r.dir.x, t*r.dir.y, t*r.dir.z};
+    return v3_add(&ret, r.origin, ret);
 }
