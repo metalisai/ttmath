@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TTMATH_H
+#define TTMATH_H
 
 #include <math.h>
 #include <assert.h>
@@ -132,9 +133,9 @@ typedef struct Mat3
     };
 } Mat3;
 
-Quat QUAT_IDENTITY = (Quat){.w = TT_ONE, .x = TT_ZERO, .y = TT_ZERO, .z = TT_ZERO};
-V3 V3_ZERO = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
-V3 V3_ONE = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
+extern Quat QUAT_IDENTITY;
+extern V3 V3_ZERO;
+extern V3 V3_ONE;
 
 #ifdef AIKE_X86
 
@@ -711,3 +712,10 @@ static inline bool ray_intersect_plane(V3 *res, Ray r, V4 p) {
     v3_add(res, r.origin, *res);
     return 1;
 }
+#endif /* !TTMATH_H */
+
+#ifdef TTMATH_IMPLEMENTATION
+Quat QUAT_IDENTITY = (Quat){.w = TT_ONE, .x = TT_ZERO, .y = TT_ZERO, .z = TT_ZERO};
+V3 V3_ZERO = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
+V3 V3_ONE = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
+#endif
