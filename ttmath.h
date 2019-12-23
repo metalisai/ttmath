@@ -697,9 +697,19 @@ static inline void quat_v3_mul_dir(V3 *restrict res, Quat q, V3 v)
     res->x = rh.x; res->y = rh.y; res->z = rh.z;
 }
 
-static inline V3 ray_intersect_plane(Ray r, V4 p) {
+static inline bool ray_intersect_plane(V3 *res, Ray r, V4 p) {
     V3 n = (V3){p.x, p.y, p.z};
-    ttreal t = -(v3_dot(r.origin, n) + p.w) / v3_dot(r.dir,n);
-    V3 ret = (V3) {t*r.dir.x, t*r.dir.y, t*r.dir.z};
-    return v3_add(&ret, r.origin, ret);
+    float denom = v3_dot(r.dir,n);
+    if(tt_abs(denom) <= FLT_EPSILON) {
+        assert(0);
+        return 0;
+    } 
+    ttreal t = -(v3_dot(r.origin, n) + p.w) / denom;
+    if(t < 0) {
+        assert(0);
+        return 0;
+    }
+    *res = (V3) {t*r.dir.x, t*r.dir.y, t*r.dir.z};
+    v3_add(res, r.origin, *res);
+    return 1;
 }
