@@ -163,7 +163,7 @@ typedef struct Mat4_sse2
 }Mat4_sse2;
 
 
-void mat4_mul_sse2(struct Mat4_sse2 *m, struct Mat4_sse2 *l, struct Mat4_sse2 *r)
+static inline void mat4_mul_sse2(struct Mat4_sse2 *m, struct Mat4_sse2 *l, struct Mat4_sse2 *r)
 {
     for (int row = 0; row < 4; row++)
 	{
@@ -224,7 +224,7 @@ typedef struct Mat4_sse2
     };
 } Mat4_sse2;
 
-void mat4_mul_sse2(struct Mat4_sse2 *m, struct Mat4_sse2 *l, struct Mat4_sse2 *r)
+static inline void mat4_mul_sse2(struct Mat4_sse2 *m, struct Mat4_sse2 *l, struct Mat4_sse2 *r)
 {
     assert(false);
 }
