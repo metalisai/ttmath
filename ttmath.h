@@ -551,7 +551,7 @@ static inline void mat4_rotation(struct Mat4 *restrict m, struct Quat *restrict 
 	m->m44 = TT_ONE;
 }
 
-static inline void mat3_rotation(struct Mat3 restrict m, struct Quat *restrict q) {
+static inline void mat3_rotation(struct Mat3 *restrict m, struct Quat *restrict q) {
     m->m11 = TT_ONE - TT_TWO*q->y*q->y - TT_TWO*q->z*q->z;
 	m->m21 = TT_TWO*q->x*q->y + TT_TWO*q->z*q->w;
 	m->m31 = TT_TWO*q->x*q->z - TT_TWO*q->y*q->w;
