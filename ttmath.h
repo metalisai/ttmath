@@ -607,6 +607,20 @@ static inline void mat4_mul(struct Mat4 *restrict m, struct Mat4 *restrict l, st
     m->m44 = l->m41 * r->m14 + l->m42 * r->m24 + l->m43 * r->m34 + l->m44 * r->m44;
 }
 
+static inline void mat3_mul(struct Mat3 *restrict m, struct Mat3 *restrict l, struct Mat3 *restrict r)
+{
+    m->m11 = l->m11 * r->m11 + l->m12 * r->m21 + l->m13 * r->m31;
+    m->m21 = l->m21 * r->m11 + l->m22 * r->m21 + l->m23 * r->m31;
+    m->m31 = l->m31 * r->m11 + l->m32 * r->m21 + l->m33 * r->m31;
+    m->m12 = l->m11 * r->m12 + l->m12 * r->m22 + l->m13 * r->m32;
+    m->m22 = l->m21 * r->m12 + l->m22 * r->m22 + l->m23 * r->m32;
+    m->m32 = l->m31 * r->m12 + l->m32 * r->m22 + l->m33 * r->m32;
+    m->m13 = l->m11 * r->m13 + l->m12 * r->m23 + l->m13 * r->m33;
+    m->m23 = l->m21 * r->m13 + l->m22 * r->m23 + l->m23 * r->m33;
+    m->m33 = l->m31 * r->m13 + l->m32 * r->m23 + l->m33 * r->m33;
+}
+
+
 /*static void v4_mat3_mul(struct V4 *res, struct V4 *v, struct Mat4 *m)
 {
     res->x = v->x*m->m11+v->y*m->m21+v->z*m->m31+v->w*m->m41;
