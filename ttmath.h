@@ -743,6 +743,7 @@ static inline bool ray_intersect_plane(V3 *res, Ray r, V4 p) {
 
 int lineCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2);
 int lineSegCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2);
+V2 closest_point_on_line_seg(V2 p, V2 start, V2 end);
 
 #endif /* !TTMATH_H */
 
@@ -791,5 +792,17 @@ int lineSegCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2
     }
     return ret;
 }
+
+V2 closest_point_on_line_seg(V2 p, V2 start, V2 end) {
+    V2 dif, difp, ret;
+    v2_sub(&dif, end, start);
+    v2_sub(&difp, p, start);
+    float len2 = dif.x*dif.x + dif.y*dif.y;
+    float t = (difp.x*dif.x + difp.y*dif.y) / len2;
+    t = CLAMP(t, 0.0f, 1.0f);
+    v2_add(&ret, start, (V2){dif.x*t, dif.y*t});
+    return ret;
+}
+
 
 #endif
