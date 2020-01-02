@@ -751,7 +751,7 @@ Quat QUAT_IDENTITY = (Quat){.w = TT_ONE, .x = TT_ZERO, .y = TT_ZERO, .z = TT_ZER
 V3 V3_ZERO = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
 V3 V3_ONE = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
 
-static int lineCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2) {
+int lineCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2) {
 	V2 p1, p2;
 	v2_sub(&p1, point1, circlePos);
 	v2_sub(&p2, point2, circlePos);
