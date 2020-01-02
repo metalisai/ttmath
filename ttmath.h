@@ -8,6 +8,9 @@
 #define restrict __restrict__
 #endif
 
+
+#define TT_CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
+
 // type used for real nubmers
 #ifndef ttreal
 #define ttreal float
@@ -799,7 +802,7 @@ V2 closest_point_on_line_seg(V2 p, V2 start, V2 end) {
     v2_sub(&difp, p, start);
     float len2 = dif.x*dif.x + dif.y*dif.y;
     float t = (difp.x*dif.x + difp.y*dif.y) / len2;
-    t = CLAMP(t, 0.0f, 1.0f);
+    t = TT_CLAMP(t, 0.0f, 1.0f);
     v2_add(&ret, start, (V2){dif.x*t, dif.y*t});
     return ret;
 }
