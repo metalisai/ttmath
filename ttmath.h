@@ -740,10 +740,56 @@ static inline bool ray_intersect_plane(V3 *res, Ray r, V4 p) {
     v3_add(res, r.origin, *res);
     return 1;
 }
+
+int lineCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2);
+int lineSegCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2);
+
 #endif /* !TTMATH_H */
 
 #ifdef TTMATH_IMPLEMENTATION
 Quat QUAT_IDENTITY = (Quat){.w = TT_ONE, .x = TT_ZERO, .y = TT_ZERO, .z = TT_ZERO};
 V3 V3_ZERO = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
 V3 V3_ONE = (V3){TT_ZERO, TT_ZERO, TT_ZERO};
+
+static int lineCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2) {
+	V2 p1, p2;
+	v2_sub(&p1, point1, circlePos);
+	v2_sub(&p2, point2, circlePos);
+	float m = (p2.y-p1.y)/(p2.x-p1.x);
+	float b = (p1.y - m*p1.x);
+    float det = (4.0f*m*m*b*b-4.0f*(1.0f+m*m)*(b*b-r*r));
+	if(det >= 0.0f){
+		float x1 = (-2.0f*m*b + sqrtf(det))/(2.0f*(1.0f+m*m));
+		float x2 = (-2.0f*m*b - sqrtf(det))/(2.0f*(1.0f+m*m));
+		float y1 = m*x1+b;
+		float y2 = m*x2+b;
+		results[0] = (V2){x1+circlePos.x, y1+circlePos.y};
+		if(det > FLT_EPSILON) {
+			results[1] = (V2){x2+circlePos.x, y2+circlePos.y};
+			return 2;
+		}
+		return 1;
+	}
+	return 0;
+}
+
+int lineSegCircleIntersection(V2 results[], V2 circlePos, float r, V2 point1, V2 point2) {
+    V2 lineInts[2];
+    int count = lineCircleIntersection(lineInts, circlePos, r, point1, point2);
+    int ret = 0;
+    V2 dir;
+    v2_sub(&dir, point2, point1);
+    float len = v2_len(dir);
+    v2_normalize(&dir);
+    for(int i = 0; i < count; i++) {
+        V2 toInt;
+        v2_sub(&toInt, lineInts[i], point1);
+        float dot = v2_dot(toInt, dir);
+        if(dot >= 0.0f && dot <= len) {
+            results[ret++] = lineInts[i];
+        }
+    }
+    return ret;
+}
+
 #endif
