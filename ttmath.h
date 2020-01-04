@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <assert.h>
+#include <float.h>
 
 #ifdef __cplusplus
 #define restrict __restrict__
